@@ -1,0 +1,6 @@
+*.swp
+C/Driver/build/
+*.exe
+*.map
+C/Examples/IMU/build/i2cdevlib/Arduino/I2Cdev/I2Cdev.o
+*.o

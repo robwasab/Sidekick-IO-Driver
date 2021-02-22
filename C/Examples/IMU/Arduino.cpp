@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 
-extern SerialClass Serial;
+SerialClass Serial;
 
 
 uint32_t micros(void)

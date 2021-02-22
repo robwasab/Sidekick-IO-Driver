@@ -9,7 +9,7 @@
 
 
 //#define VENDOR_INTERFACE     2
-#define VENDOR_EP_SIZE       64 // bytes
+#define VENDOR_EP_SIZE       128 // bytes
 #define MAX_PACKET_SIZE      (VENDOR_EP_SIZE - 2)
 
 //#define VENDOR_WRITE_DATA_EP 0x04
@@ -48,6 +48,7 @@ public:
 		CMD_DFU_RESET_READ_PTR = 0x0E,
 		CMD_DFU_DONE_WRITING = 0x0F,
 		CMD_DFU_RESET = 0x10,
+		CMD_I2CM_TRANSACTION = 0x11,
 	};
 
 
@@ -68,6 +69,7 @@ public:
 
 	enum LAYOUT_CONFIG {
 		LAYOUT_CONFIG_GPIO = 0x00,
+		LAYOUT_CONFIG_I2C_MASTER = 0x01,
 		LAYOUT_CONFIG_SPI_MASTER = 0x03,
 	};
 
@@ -121,6 +123,62 @@ public:
 	const char * error2str(enum SK_ERROR error_code);
 
 	void send_config_layout_gpio(void);
+
+	enum I2CM_CLK_SEL {
+		I2CM_CLK_SEL_100KHZ = 0x00,
+		I2CM_CLK_SEL_400KHZ = 0x01,
+	};
+
+	enum I2CM_CMD
+	{
+		I2CM_CMD_WRITE_DATA = 'w',
+		I2CM_CMD_WRITE_BYTE = 'W',
+		I2CM_CMD_READ_DATA = 'r',
+		I2CM_CMD_STOP = '.',
+	};
+
+	void send_config_layout_i2cm(
+			enum I2CM_CLK_SEL clk_sel = I2CM_CLK_SEL_100KHZ);
+
+
+	uint8_t get_fw_error_code(void);
+
+
+	bool send_i2cm_write_data(
+			uint8_t slave_addr,
+			const uint8_t * data,
+			size_t len);
+
+
+	bool send_i2cm_read_data(
+			uint8_t slave_addr,
+			uint8_t * data,
+			size_t  * len);
+
+
+	bool send_i2cm_write_register(
+			uint8_t slave_addr,
+			uint8_t reg,
+			const uint8_t * data,
+			size_t  len);
+
+	bool send_i2cm_write_register_byte(
+			uint8_t slave_addr,
+			uint8_t reg,
+			uint8_t val);
+
+	bool send_i2cm_read_register(
+			uint8_t slave_addr,
+			uint8_t reg,
+			uint8_t * data,
+			size_t * len);
+
+	bool send_i2cm_read_register_byte(
+			uint8_t slave_addr,
+			uint8_t reg,
+			uint8_t * val);
+
+
 
 	enum SPI_MODE {
 		SPI_MODE_0 = 0x00,
@@ -179,6 +237,9 @@ private:
 
 	enum FW_MODE mFWMode;
 
+	uint8_t mFWErrorCode;
+	bool mPrintFlag;
+
 	const char * fw_mode2str(enum FW_MODE mode);
 
 	void init(enum FW_MODE mode);
@@ -191,6 +252,14 @@ private:
 
 	bool search_for_sidekick(enum FW_MODE * fw_mode);
 	bool wait_for_sidekick(enum FW_MODE mode, uint32_t timeout_sec);
+
+	bool analyze_i2cm_rsp(
+		const uint8_t * rspdata,
+		size_t rsplen,
+		uint8_t * outdata,
+		size_t  * outlen);
+
+	void print_arr(const uint8_t * data, size_t len);
 };
 
 #endif

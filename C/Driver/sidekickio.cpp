@@ -300,7 +300,7 @@ static uint32_t get_status(libusb_device_handle * handle, uint8_t notify_ep)
 	return status;
 }
 
-void print_arr(const uint8_t * data, size_t len) {
+void SidekickIO::print_arr(const uint8_t * data, size_t len) {
 	for(size_t k = 0; k < len; k++) {
 		if(k < len - 1) {
 			printf("%02x:", data[k]);
@@ -376,6 +376,7 @@ void SidekickIO::init(enum FW_MODE mode)
 
 
 SidekickIO::SidekickIO(enum FW_MODE mode) {
+	mPrintFlag = true;
 	int ret;
 	ret = libusb_init(&mUSB);
 	usb_result(ret, "couldn't init libusb");
@@ -537,7 +538,6 @@ void SidekickIO::transfer_cmd(
 }
 
 
-
 void SidekickIO::send_config_layout_gpio(void) {
 	Packet rsp = {0};
 	size_t rsplen = 0;
@@ -551,6 +551,12 @@ void SidekickIO::send_config_layout_gpio(void) {
 
 	assert(SK_ERROR_NONE == rsp.header.error);
 	printf("application layout: gpio configured!\n");
+}
+
+
+uint8_t SidekickIO::get_fw_error_code(void)
+{
+	return mFWErrorCode;
 }
 
 

@@ -85,7 +85,7 @@ bool SidekickIO::analyze_i2cm_rsp(
 }
 
 
-bool SidekickIO::send_i2cm_write_data(
+bool SidekickIO::i2cm_write_data(
 			uint8_t slave_addr,
 			const uint8_t * write_data,
 			size_t write_len) {
@@ -114,7 +114,7 @@ bool SidekickIO::send_i2cm_write_data(
 }
 
 
-bool SidekickIO::send_i2cm_read_data(
+bool SidekickIO::i2cm_read_data(
 			uint8_t slave_addr,
 			uint8_t * read_data,
 			size_t  * read_len) {
@@ -142,7 +142,7 @@ bool SidekickIO::send_i2cm_read_data(
 }
 
 
-bool SidekickIO::send_i2cm_write_register(
+bool SidekickIO::i2cm_write_register(
 		uint8_t slave_addr,
 		uint8_t reg,
 		const uint8_t * data,
@@ -176,16 +176,16 @@ bool SidekickIO::send_i2cm_write_register(
 }
 
 
-bool SidekickIO::send_i2cm_write_register_byte(
+bool SidekickIO::i2cm_write_register_byte(
 		uint8_t slave_addr,
 		uint8_t reg,
 		uint8_t val)
 {
-	return send_i2cm_write_register(slave_addr, reg, &val, 1);
+	return i2cm_write_register(slave_addr, reg, &val, 1);
 }
 
 
-bool SidekickIO::send_i2cm_read_register(
+bool SidekickIO::i2cm_read_register(
 		uint8_t slave_addr,
 		uint8_t reg,
 		uint8_t * read_data,
@@ -218,11 +218,11 @@ bool SidekickIO::send_i2cm_read_register(
 }
 
 
-bool SidekickIO::send_i2cm_read_register_byte(
+bool SidekickIO::i2cm_read_register_byte(
 		uint8_t slave_addr,
 		uint8_t reg,
 		uint8_t * val)
 {
 	size_t read_amt = 1;
-	return send_i2cm_read_register(slave_addr, reg, val, &read_amt);
+	return i2cm_read_register(slave_addr, reg, val, &read_amt);
 }

@@ -112,7 +112,7 @@ public:
 	} __attribute__((packed));
 
 
-	SidekickIO(enum FW_MODE mode);
+	SidekickIO(enum FW_MODE mode = FW_MODE_APP);
 	~SidekickIO(void);
 
 
@@ -144,36 +144,36 @@ public:
 	uint8_t get_fw_error_code(void);
 
 
-	bool send_i2cm_write_data(
+	bool i2cm_write_data(
 			uint8_t slave_addr,
 			const uint8_t * data,
 			size_t len);
 
 
-	bool send_i2cm_read_data(
+	bool i2cm_read_data(
 			uint8_t slave_addr,
 			uint8_t * data,
 			size_t  * len);
 
 
-	bool send_i2cm_write_register(
+	bool i2cm_write_register(
 			uint8_t slave_addr,
 			uint8_t reg,
 			const uint8_t * data,
 			size_t  len);
 
-	bool send_i2cm_write_register_byte(
+	bool i2cm_write_register_byte(
 			uint8_t slave_addr,
 			uint8_t reg,
 			uint8_t val);
 
-	bool send_i2cm_read_register(
+	bool i2cm_read_register(
 			uint8_t slave_addr,
 			uint8_t reg,
 			uint8_t * data,
 			size_t * len);
 
-	bool send_i2cm_read_register_byte(
+	bool i2cm_read_register_byte(
 			uint8_t slave_addr,
 			uint8_t reg,
 			uint8_t * val);

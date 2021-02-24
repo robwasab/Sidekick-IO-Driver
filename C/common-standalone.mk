@@ -14,6 +14,7 @@ ODUMP:=objdump
 SZ:=size
 MKDIR:=mkdir
 MV:=mv
+ARCHIVER:=ar
 
 # puts each function and each data item into its own section
 #-ffunction-sections \
@@ -42,6 +43,11 @@ ECHO_BLUE="\e[94m"
 CFLAGS += $(foreach i,$(INCLUDES),-I$(i))
 CFLAGS += $(foreach d,$(DEFINES),-D$(d))
 
+
+LIBFLAGS  = $(foreach l,$(LIBS),-Wl,-l:$(l))
+LIBFLAGS += $(foreach d,$(LDRS),-L $(d))
+
+
 TARGET = $(PROJECT)
 
 BUILD_DIR := $(ROOT_PATH)/build
@@ -56,36 +62,49 @@ MAIN_EXES = $(patsubst $(ROOT_PATH)/%.cpp,$(OUTPU_DIR)/%,$(MAIN_SRCS))
 
 ################################################################################
 
-
+# Object file creation
 $(BUILD_DIR)%.o : $(ROOT_PATH)%.cpp
 	@echo -e $(ECHO_BOLD)$(ECHO_GREEN)"compiling" $@ "from" $< $(ECHO_RESET)
 	@$(MKDIR) -p $(dir $@)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
+# keep target object files
+.PRECIOUS: $(MAIN_OBJS)
 
+# Executable recipe
 $(OUTPU_DIR)%: $(OBJS) $(BUILD_DIR)%.o
 	@echo -e $(ECHO_BOLD)$(ECHO_BLUE)"Linking" $@ "from" $^ $(ECHO_RESET)
 	@$(MKDIR) -p $(dir $@)
-	$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $@
+	$(CC) $(CFLAGS) $^ $(LIBFLAGS) $(LDFLAGS) -o $@
 	$(MV) $@ ./$(notdir $@)
 
 
-all: $(MAIN_EXES)
+.PHONY: all
+all: $(LIBS) $(MAIN_EXES)
 	@echo -e "Done!"
 
 
+.PHONY: lib
+lib: $(OBJS)
+	@echo -e $(ECHO_BOLD)$(ECHO_BLUE)"Making static library" $^ $(ECHO_RESET)
+	$(ARCHIVER) -rcs $(BUILD_DIR)/$(TARGET).a $^
+
 .PHONY: test
 test: $(OBJS)
-	@echo "srcs" $(SRCS)
+	@echo "srcs" $(MAIN_SRCS)
 	@echo "objs" $(OBJS)
 	@echo "flag" $(CFLAGS)
+	@echo "libflags" $(LIBFLAGS)
+	@echo "libs" $(LIBS)
 	@echo "test"
 	#$(CC) $(CFLAGS) $^ $(LDFLAGS) -o $(TARGET).exe
+
 
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -rf $(OUTPU_DIR)
+
 
 .PHONY: run
 run:

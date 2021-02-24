@@ -13,9 +13,12 @@ SRCS = \
 INCLUDES = \
 	$(ROOT_PATH)
 
-CFLAGS := -lusb-1.0
+#CFLAGS := -lusb-1.0
+#LDFLAGS := -Wl,-lusb-1.0
 
-LDFLAGS := -Wl,-lusb-1.0
+LIBS = libusb-1.0.dll
+
+LDRS = .
 
 PROJECT := SidekickIO
 

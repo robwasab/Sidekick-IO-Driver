@@ -34,6 +34,9 @@ bool SidekickIO::analyze_i2cm_rsp(
 		uint8_t data[];
 	};
 
+	const uint8_t * orig_rspdata = rspdata;
+	size_t orig_rsplen = rsplen;
+
 	size_t outmax = 0;
 
 	if(NULL != outdata) {
@@ -41,7 +44,9 @@ bool SidekickIO::analyze_i2cm_rsp(
 		*outlen = 0;
 	}
 
-	print_arr(rspdata, rsplen);
+	if(true == mPrintFlag) {
+		print_arr(rspdata, rsplen);
+	}
 
 	while(0 < rsplen)
 	{
@@ -68,11 +73,22 @@ bool SidekickIO::analyze_i2cm_rsp(
 			printf("  datalen: %d\n"   , datalen);
 		}
 
+		// check if there was an error
 		if(SidekickIO::SK_ERROR_NONE != header->sk_error) {
 			mFWErrorCode = header->asf_error;
+
+			printf("an error occurred...\n");
+
+			// force a trace of the data by setting the print flag
+			if(false == mPrintFlag) {
+				mPrintFlag = true;
+				analyze_i2cm_rsp(orig_rspdata, orig_rsplen, NULL, NULL);
+				mPrintFlag = false;
+			}
 			return false;
 		}
 
+		// copy data to the output buffer
 		if(NULL != outdata && *outlen < outmax) {
 			size_t num2write = MIN(datalen, outmax - *outlen);
 			memcpy(&outdata[*outlen],
@@ -155,6 +171,8 @@ bool SidekickIO::i2cm_write_register(
 			I2CM_CMD_WRITE_DATA,
 			I2CM_CMD_STOP
 	};
+
+	//printf("CMD_I2CM_TRANSACTION: %02xh\n", CMD_I2CM_TRANSACTION);
 
 	transfer_cmd(
 		&rsp,

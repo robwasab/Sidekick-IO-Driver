@@ -8,6 +8,8 @@
 #include "libusb.h"
 
 
+#define ARRAY_SIZE(arr)  (sizeof(arr)/sizeof(arr[0]))
+
 //#define VENDOR_INTERFACE     2
 #define VENDOR_EP_SIZE       128 // bytes
 #define MAX_PACKET_SIZE      (VENDOR_EP_SIZE - 2)
@@ -41,14 +43,15 @@ public:
 		CMD_GPIO_CLR_INTRPT_STATUS = 0x07,
 		CMD_GPIO_ENA_PIN_INTRPT = 0x08,
 		CMD_GPIO_WRITE_PARALLEL = 0x09,
-		CMD_SPIM_TRANSFER_DATA  = 0x0A,
-    CMD_DFU_START = 0x0B,
-    CMD_DFU_WRITE_DATA = 0x0C,
-    CMD_DFU_READ_DATA  = 0x0D,
-		CMD_DFU_RESET_READ_PTR = 0x0E,
-		CMD_DFU_DONE_WRITING = 0x0F,
-		CMD_DFU_RESET = 0x10,
-		CMD_I2CM_TRANSACTION = 0x11,
+		CMD_GPIO_DIS_PIN_INTRPT = 0x0A,
+		CMD_SPIM_TRANSFER_DATA  = 0x0B,
+    CMD_DFU_START = 0x0C,
+    CMD_DFU_WRITE_DATA = 0x0D,
+    CMD_DFU_READ_DATA  = 0x0E,
+		CMD_DFU_RESET_READ_PTR = 0x0F,
+		CMD_DFU_DONE_WRITING = 0x10,
+		CMD_DFU_RESET = 0x11,
+		CMD_I2CM_TRANSACTION = 0x12,
 	};
 
 
@@ -122,7 +125,7 @@ public:
 
 	const char * error2str(enum SK_ERROR error_code);
 
-	void send_config_layout_gpio(void);
+	void config_layout_gpio(void);
 
 	enum I2CM_CLK_SEL {
 		I2CM_CLK_SEL_100KHZ = 0x00,
@@ -192,18 +195,27 @@ public:
 		SPI_DATA_ORDER_LSB = 0x01,
 	};
 
-	void send_config_layout_spim(
+	void config_layout_spim(
 			enum SPI_MODE spi_mode = SPI_MODE_0,
 			enum SPI_DATA_ORDER data_order = SPI_DATA_ORDER_MSB);
 
-	void send_gpio_config(uint8_t gpio_index, enum GPIO_CONFIG_DIR dir,
+	void gpio_config(uint8_t gpio_index, enum GPIO_CONFIG_DIR dir,
 		enum GPIO_CONFIG_PULL pull);
 
-	void send_gpio_pin_set(uint8_t gpio_index, bool level);
-	void send_gpio_read(uint8_t gpio_index, bool * level);
-	void send_gpio_get_intrpt_status(uint32_t * gpio_int_mask);
-	void send_gpio_clr_intrpt_status(uint32_t gpio_int_mask);
-	void send_gpio_enable_pin_intrpt(uint8_t gpio_index);
+	void gpio_pin_set(uint8_t gpio_index, bool level);
+	bool gpio_read(uint8_t gpio_index);
+	void gpio_get_intrpt_status(uint32_t * gpio_int_mask);
+	void gpio_clr_intrpt_status(uint32_t gpio_int_mask);
+
+	typedef void(*GPIOHandler)(SidekickIO * self, uint8_t gpio_index, void * obj);
+
+	void gpio_enable_pin_intrpt(
+			uint8_t gpio_index,
+			GPIOHandler handler,
+			void * obj);
+
+	void gpio_disable_pin_intrpt(uint8_t gpio_index);
+
 
 	void send_echo(uint8_t * data, size_t len, bool * match);
 
@@ -230,15 +242,31 @@ private:
 	time_t mLastPollTime;
 	time_t mPollInterval;
 
+	// sidekick interface number
 	uint8_t mInterface;
+
+	// write endpoint number
 	uint8_t mWriteEP;
+
+	// read endpoint number
 	uint8_t mReadEP;
+
+	// notify endpoint number
 	uint8_t mNotifyEP;
 
+	// Max 32 pins on PORTB of atsamd21
+	GPIOHandler mGPIOHandlers[32];
+	void * mGPIOHandlersArgs[ARRAY_SIZE(mGPIOHandlers)];
+
+	// contains the sidekick's firmware mode read a initialization
 	enum FW_MODE mFWMode;
 
+	// holds firmware error code if an error occurs
 	uint8_t mFWErrorCode;
+
+	// when true, enables debug prints
 	bool mPrintFlag;
+
 
 	const char * fw_mode2str(enum FW_MODE mode);
 

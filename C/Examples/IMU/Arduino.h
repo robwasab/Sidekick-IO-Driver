@@ -41,6 +41,14 @@ public:
   void print(const char * arg) {
     printf(arg);
   }
+
+  void println(const char * arg) {
+    printf("%s\n", arg);
+  }
+
+  void println(void) {
+    printf("\n");
+  }
 };
 
 extern SerialClass Serial;

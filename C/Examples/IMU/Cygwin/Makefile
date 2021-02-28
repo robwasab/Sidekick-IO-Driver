@@ -2,7 +2,9 @@
 ROOT_PATH = ..
 
 MAIN_SRCS = \
-	$(ROOT_PATH)/sidekick_i2c.cpp
+	$(ROOT_PATH)/imu_self_test.cpp \
+	$(ROOT_PATH)/imu_interrupt_read.cpp
+	#$(ROOT_PATH)/sidekick_i2c.cpp \
 
 SRCS = \
 	$(ROOT_PATH)/i2cdevlib/Arduino/MPU6050/MPU6050.cpp \

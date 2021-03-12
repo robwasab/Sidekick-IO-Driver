@@ -5,18 +5,42 @@
 #include <assert.h>
 #include <time.h>
 #include <stdlib.h>
+
+
+
+#ifdef _MSC_VER
+
+#define PACKED_STRUCT_BEGIN   __pragma( pack(push, 1) )
+
+#define PACKED_STRUCT_END     __pragma( pack(pop) )
+
+
+// Disable "nonstandard extension used: zero-sized array in struct/union"
+#pragma warning(push)
+#pragma warning(disable : 4200)
+
 #include "libusb.h"
+
+#pragma warning(pop)
+
+#else
+
+#define PACKED_STRUCT_BEGIN   _Pragma("pack(push, 1)")
+
+#define PACKED_STRUCT_END     _Pragma("pack(pop)")
+
+
+//#define PACK( __Declaration__ ) __Declaration__ __attribute__((__packed__))
+#include "libusb.h"
+
+#endif
 
 
 #define ARRAY_SIZE(arr)  (sizeof(arr)/sizeof(arr[0]))
 
-//#define VENDOR_INTERFACE     2
-#define VENDOR_EP_SIZE       128 // bytes
+#define VENDOR_EP_SIZE       64 // bytes
 #define MAX_PACKET_SIZE      (VENDOR_EP_SIZE - 2)
 
-//#define VENDOR_WRITE_DATA_EP 0x04
-//#define VENDOR_READ_DATA_EP  0x05 | (1 << 7) // masked in 0x80 because it's an IN endpoint
-//#define VENDOR_NOTIFY_EP     0x06 | (1 << 7) // masked in 0x80 because it's an IN endpoint
 #define TIMEOUT_MS           1000
 #define NUM_RETRIES          1000
 
@@ -45,13 +69,14 @@ public:
 		CMD_GPIO_WRITE_PARALLEL = 0x09,
 		CMD_GPIO_DIS_PIN_INTRPT = 0x0A,
 		CMD_SPIM_TRANSFER_DATA  = 0x0B,
-    CMD_DFU_START = 0x0C,
-    CMD_DFU_WRITE_DATA = 0x0D,
-    CMD_DFU_READ_DATA  = 0x0E,
+		CMD_DFU_START = 0x0C,
+		CMD_DFU_WRITE_DATA = 0x0D,
+		CMD_DFU_READ_DATA  = 0x0E,
 		CMD_DFU_RESET_READ_PTR = 0x0F,
 		CMD_DFU_DONE_WRITING = 0x10,
 		CMD_DFU_RESET = 0x11,
 		CMD_I2CM_TRANSACTION = 0x12,
+		CMD_GPIO_SET_LED = 0x13,
 	};
 
 
@@ -101,19 +126,28 @@ public:
 		FW_MODE_MAX,
 	};
 
+	// for some reason, swig can't interpret the packed struct macros
+	// remove them when compiling swig interface
+	// public facing api shouldn't need to know how packets are formatted
+	// anyways...
+	#ifndef SWIG
+	PACKED_STRUCT_BEGIN
+	#endif
 
 	struct PacketHeader {
 		uint8_t seq_no:1;
 		uint8_t cmd:7;
 		uint8_t error;
-	} __attribute__((packed));
-
+	};
 
 	struct Packet {
 		struct PacketHeader header;
 		uint8_t data[VENDOR_EP_SIZE - sizeof(PacketHeader)];
-	} __attribute__((packed));
+	};
 
+	#ifndef SWIG
+	PACKED_STRUCT_END
+	#endif
 
 	SidekickIO(enum FW_MODE mode = FW_MODE_APP);
 	~SidekickIO(void);
@@ -197,9 +231,18 @@ public:
 
 	void config_layout_spim(
 			enum SPI_MODE spi_mode = SPI_MODE_0,
-			enum SPI_DATA_ORDER data_order = SPI_DATA_ORDER_MSB);
+			enum SPI_DATA_ORDER data_order = SPI_DATA_ORDER_MSB,
+			uint32_t baudrate = 1000000);
 
-	void gpio_config(uint8_t gpio_index, enum GPIO_CONFIG_DIR dir,
+	bool spim_transfer_packet(uint8_t cs_index, uint8_t * buf, size_t len);
+	bool spim_transfer(uint8_t cs_index, uint8_t * buf, size_t len);
+
+	bool spim_write(uint8_t cs_index, const uint8_t * data, size_t len);
+	bool spim_write_byte(uint8_t cs_index, uint8_t val);
+
+	void gpio_set_led(bool on);
+
+	bool gpio_config(uint8_t gpio_index, enum GPIO_CONFIG_DIR dir,
 		enum GPIO_CONFIG_PULL pull);
 
 	void gpio_pin_set(uint8_t gpio_index, bool level);
@@ -218,8 +261,6 @@ public:
 
 
 	void send_echo(uint8_t * data, size_t len, bool * match);
-
-	void query_mode(enum FW_MODE * mode);
 
 	void test_echo(void);
 

@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <assert.h>
 #include <time.h>
@@ -6,7 +7,7 @@
 
 #define SK SidekickIO
 
-void test_application(void)
+int main(void)
 {
 	SidekickIO sidekick(SK::FW_MODE_APP);
 	//sidekick.send_config_layout_gpio();
@@ -22,8 +23,8 @@ void test_application(void)
 		SK::GPIO_CONFIG_DIR_OUT,
 		SK::GPIO_CONFIG_PULL_NONE);
 
-	bool level = true;
-	sidekick.gpio_pin_set(2, level);
+	//bool level = true;
+	//sidekick.gpio_pin_set(2, level);
 
 	time_t init_time = time(NULL);
 
@@ -39,11 +40,5 @@ void test_application(void)
 		}
 		sidekick.main_loop_task();
 	}
-
-	printf("done\n");
-}
-
-
-int main(void) {
-	test_application();
+	return 0;
 }

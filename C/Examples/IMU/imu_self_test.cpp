@@ -163,6 +163,7 @@ void gpio_callback(SidekickIO * self, uint8_t gpio_index, void * obj)
 
 int main(void)
 {
+  #define INT_PIN 4
   sidekick.send_config_layout_i2cm(
     SK::I2CM_CLK_SEL_100KHZ);
 
@@ -172,7 +173,7 @@ int main(void)
   printf("resetting...\n");
   accelgyro.reset();
   usleep(100 * 1000);
-  
+
   accelgyro.resetGyroscopePath();
   accelgyro.resetAccelerometerPath();
   accelgyro.resetTemperaturePath();
@@ -191,8 +192,8 @@ int main(void)
   configure_interrupt(accelgyro);
 
   // configure the sidekick interrupt pin on p0
-  sidekick.gpio_config(0, SK::GPIO_CONFIG_DIR_IN, SK::GPIO_CONFIG_PULL_UP);
-  sidekick.gpio_enable_pin_intrpt(0, gpio_callback, &accelgyro);
+  sidekick.gpio_config(INT_PIN, SK::GPIO_CONFIG_DIR_IN, SK::GPIO_CONFIG_PULL_UP);
+  sidekick.gpio_enable_pin_intrpt(INT_PIN, gpio_callback, &accelgyro);
 
   while(true) {
     sidekick.main_loop_task();

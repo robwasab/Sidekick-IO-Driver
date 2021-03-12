@@ -1,6 +1,16 @@
 
 #include "sidekickio.h"
 
+#ifdef _MSC_VER
+
+// Disable: "nonstandard extension used:zero-sized array in struct / union"
+#pragma warning(disable : 4200)
+
+// Disable: Prefer 'enum class' over 'enum'
+#pragma warning(disable : 26812)
+
+#endif
+
 
 void SidekickIO::send_config_layout_i2cm(
 			enum I2CM_CLK_SEL clk_sel) {
@@ -70,7 +80,7 @@ bool SidekickIO::analyze_i2cm_rsp(
 			printf("     type: %c\n"   , header->type);
 			printf(" sk error: %02xh\n", header->sk_error);
 			printf("asf error: %02xh\n", header->asf_error);
-			printf("  datalen: %d\n"   , datalen);
+			printf("  datalen: %zd\n"   , datalen);
 		}
 
 		// check if there was an error
@@ -148,7 +158,7 @@ bool SidekickIO::i2cm_read_data(
 		slave_addr,                       // 'b'
 		sizeof(i2c_fmt_str),              // 'b'
 		i2c_fmt_str, sizeof(i2c_fmt_str), // 'a' i2c format string
-		*read_len);                        // 'b' data length byte
+		*read_len);                       // 'b' data length byte
 
 	return analyze_i2cm_rsp(
 			rsp.data,

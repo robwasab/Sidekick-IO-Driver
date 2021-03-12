@@ -1,6 +1,34 @@
 
 #include "sidekickio.h"
+
+
+#ifdef _MSC_VER
+
+
+#include <windows.h>
+
+// eww....
+void usleep(int waitTime) {
+	__int64 time1 = 0;
+	__int64 time2 = 0;
+
+	QueryPerformanceCounter((LARGE_INTEGER*)&time1);
+
+	do {
+		QueryPerformanceCounter((LARGE_INTEGER*)&time2);
+	} while ((time2 - time1) < waitTime);
+}
+
+// Disable "Prefer enum class over enum"
+#pragma warning(disable : 26812)
+
+
+#else
+
 #include <unistd.h>
+
+#endif
+
 
 
 static void usb_result(int error, const char * msg) {
@@ -87,7 +115,7 @@ static libusb_device_handle * find_usb_device(
 
 	// pass in a reference to our device list so the api can change its value
 	ssize_t cnt = libusb_get_device_list(context, &devices);
-	usb_result(cnt, "failed to get device list");
+	usb_result((int) cnt, "failed to get device list");
 
 	assert(NULL != devices);
 
@@ -240,7 +268,6 @@ static void send_data(
 		size_t len)
 {
 	int num_transferred = 0;
-	unsigned int timeout_ms = TIMEOUT_MS;
 	int res;
 
 	res = libusb_bulk_transfer(
@@ -249,7 +276,7 @@ static void send_data(
 		data,
 		len,
 		&num_transferred,
-		timeout_ms);
+		TIMEOUT_MS);
 	usb_result(res, "bulk write transfer failed");
 	assert(num_transferred == (int)len);
 }
@@ -262,7 +289,6 @@ static void recv_data(
 		size_t * len)
 {
 	int num_transferred = 0;
-	unsigned int timeout_ms = TIMEOUT_MS;
 	int res;
 
 	res = libusb_bulk_transfer(
@@ -271,7 +297,7 @@ static void recv_data(
 		data,
 		*len,
 		&num_transferred,
-		timeout_ms);
+		TIMEOUT_MS);
 	usb_result(res, "bulk read transfer failed");
 
 	//printf("recv_data len: %zu\n", *len);
@@ -312,16 +338,17 @@ void SidekickIO::print_arr(const uint8_t * data, size_t len) {
 	}
 }
 
-const char * SidekickIO::fw_mode2str(enum FW_MODE mode)
-{
+
+const char * SidekickIO::fw_mode2str(enum FW_MODE mode) {
 	switch(mode) {
-		case FW_MODE_DFU:
-			return "DFU";
 		case FW_MODE_APP:
 			return "APP";
+		case FW_MODE_DFU:
+			return "DFU";
 		default:
-			return "UNKNOWN";
+			assert(false);
 	}
+	return "unimplemented";
 }
 
 void SidekickIO::init(enum FW_MODE mode)
@@ -388,7 +415,7 @@ SidekickIO::SidekickIO(enum FW_MODE mode) {
 	assert(VENDOR_EP_SIZE == sizeof(Packet));
 
 	mLastPollTime = time(NULL);
-	mPollInterval = 0.1;
+	mPollInterval = (time_t) 0.1;
 
 	init(mode);
 }
@@ -608,7 +635,8 @@ void SidekickIO::send_dfu_read_data(
 		*len);
 
 	assert(SK_ERROR_NONE == rsp.header.error);
-	*len = (rsplen - 2);
+	assert(rsplen - 2 <= 0xff);
+	*len = (uint8_t)(rsplen - 2);
 	memcpy(data, rsp.data, *len);
 }
 
@@ -752,12 +780,12 @@ void SidekickIO::firmware_update(
 	//size_t nvm_size = SK_NVM_SIZE;
 
 	//printf("sending dfu start...\n");
-	send_dfu_start(fw_data_len, 0);
+	send_dfu_start((uint32_t) fw_data_len, 0);
 
 	printf("writing data...\n");
 	size_t ptr = 0;
 	while(ptr < fw_data_len) {
-		uint8_t num2send = MIN(MAX_PACKET_SIZE, fw_data_len - ptr);
+		uint8_t num2send = (uint8_t) MIN(MAX_PACKET_SIZE, fw_data_len - ptr);
 
 		//uint32_t current_addr = send_dfu_write_data(&fw_data[ptr], num2send);
 		send_dfu_write_data(&fw_data[ptr], num2send);
@@ -782,7 +810,7 @@ void SidekickIO::firmware_update(
 
 	printf("reading data...\n");
 	while(ptr < fw_data_len) {
-		uint8_t num2read = MIN(MAX_PACKET_SIZE, fw_data_len - ptr);
+		uint8_t num2read = (uint8_t) MIN(MAX_PACKET_SIZE, fw_data_len - ptr);
 
 		//printf("attempting to read %d bytes...\n", num2read);
 
@@ -849,7 +877,7 @@ bool SidekickIO::search_for_sidekick(enum FW_MODE * fw_mode)
 
 	// pass in a reference to our device list so the api can change its value
 	ssize_t cnt = libusb_get_device_list(mUSB, &devices);
-	usb_result(cnt, "failed to get device list");
+	usb_result((int) cnt, "failed to get device list");
 
 	assert(NULL != devices);
 
@@ -996,7 +1024,7 @@ void SidekickIO::send_echo(uint8_t * data, size_t len, bool * match) {
 void SidekickIO::test_echo(void) {
 	uint8_t buf[VENDOR_EP_SIZE - sizeof(PacketHeader)] = {0};
 
-	srand(time(NULL));
+	srand((unsigned int) time(NULL));
 
 	for(int trial = 0; trial < 64; trial++) {
 

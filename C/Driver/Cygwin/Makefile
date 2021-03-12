@@ -3,8 +3,10 @@ ROOT_PATH = ..
 
 # Sources that have have main definined in them
 MAIN_SRCS = \
-	$(ROOT_PATH)/main_test_config.cpp
-	#$(ROOT_PATH)/main.cpp
+	$(ROOT_PATH)/main.cpp \
+	$(ROOT_PATH)/test_led.cpp \
+	$(ROOT_PATH)/test_dfu.cpp \
+	$(ROOT_PATH)/test_echo.cpp
 
 SRCS = \
 	$(ROOT_PATH)/sidekickio.cpp \

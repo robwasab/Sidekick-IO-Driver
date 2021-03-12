@@ -53,17 +53,20 @@ TARGET = $(PROJECT)
 BUILD_DIR := $(ROOT_PATH)/build
 OUTPU_DIR := $(ROOT_PATH)/output
 
-OBJS = $(patsubst $(ROOT_PATH)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+#OBJS = $(patsubst $(ROOT_PATH)/%.cpp,$(BUILD_DIR)/%.o,$(SRCS))
+OBJS = $(patsubst $(ROOT_PATH)/%,$(BUILD_DIR)/%.o,$(SRCS))
 
-MAIN_OBJS = $(patsubst $(ROOT_PATH)/%.cpp,$(BUILD_DIR)/%.o,$(MAIN_SRCS))
+#MAIN_OBJS = $(patsubst $(ROOT_PATH)/%.cpp,$(BUILD_DIR)/%.o,$(MAIN_SRCS))
+MAIN_OBJS = $(patsubst $(ROOT_PATH)/%,$(BUILD_DIR)/%.o,$(MAIN_SRCS))
 
-MAIN_EXES = $(patsubst $(ROOT_PATH)/%.cpp,$(OUTPU_DIR)/%,$(MAIN_SRCS))
+#MAIN_EXES = $(patsubst $(ROOT_PATH)/%.cpp,$(OUTPU_DIR)/%,$(MAIN_SRCS))
+MAIN_EXES = $(patsubst $(ROOT_PATH)/%,$(OUTPU_DIR)/%.out,$(MAIN_SRCS))
 
 
 ################################################################################
 
 # Object file creation
-$(BUILD_DIR)%.o : $(ROOT_PATH)%.cpp
+$(BUILD_DIR)%.o : $(ROOT_PATH)%
 	@echo -e $(ECHO_BOLD)$(ECHO_GREEN)"compiling" $@ "from" $< $(ECHO_RESET)
 	@$(MKDIR) -p $(dir $@)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -72,7 +75,7 @@ $(BUILD_DIR)%.o : $(ROOT_PATH)%.cpp
 .PRECIOUS: $(MAIN_OBJS)
 
 # Executable recipe
-$(OUTPU_DIR)%: $(OBJS) $(BUILD_DIR)%.o
+$(OUTPU_DIR)%.out : $(OBJS) $(BUILD_DIR)%.o
 	@echo -e $(ECHO_BOLD)$(ECHO_BLUE)"Linking" $@ "from" $^ $(ECHO_RESET)
 	@$(MKDIR) -p $(dir $@)
 	$(CC) $(CFLAGS) $^ $(LIBFLAGS) $(LDFLAGS) -o $@
@@ -90,8 +93,9 @@ lib: $(OBJS)
 	$(ARCHIVER) -rcs $(BUILD_DIR)/$(TARGET).a $^
 
 .PHONY: test
-test: $(OBJS)
-	@echo "srcs" $(MAIN_SRCS)
+test:
+	@echo "main srcs" $(MAIN_SRCS)
+	@echo "main exes" $(MAIN_EXES)
 	@echo "objs" $(OBJS)
 	@echo "flag" $(CFLAGS)
 	@echo "libflags" $(LIBFLAGS)

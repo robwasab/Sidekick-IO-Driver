@@ -21,7 +21,7 @@ void SidekickIO::config_layout_gpio(void) {
 }
 
 
-void SidekickIO::gpio_config(
+bool SidekickIO::gpio_config(
 		uint8_t gpio_index, enum GPIO_CONFIG_DIR dir, enum GPIO_CONFIG_PULL pull)
 {
 	Packet rsp = {0};
@@ -36,11 +36,21 @@ void SidekickIO::gpio_config(
 		dir,
 		pull);
 
-	assert(SK_ERROR_NONE == rsp.header.error);
-
-	if(mPrintFlag) {
-		printf("gpio index: %d configured!\n", gpio_index);
+	if(SK_ERROR_NONE == rsp.header.error) {
+		if(mPrintFlag) {
+			printf("gpio index: %d configured!\n", gpio_index);
+		}
+		return true;
 	}
+	else if(SK_ERROR_PARAMETER == rsp.header.error) {
+		printf("gpio config failed due to parameter, check to see if pins are available in layout config");
+		return false;
+	}
+	else {
+		assert(false);
+		return false;
+	}
+
 }
 
 
@@ -84,6 +94,21 @@ bool SidekickIO::gpio_read(
 	return rsp.data[0] > 0;
 }
 
+
+void SidekickIO::gpio_set_led(bool on)
+{
+	Packet rsp = {0};
+	size_t rsplen = 0;
+
+	transfer_cmd(
+		&rsp,
+		&rsplen,
+		CMD_GPIO_SET_LED,
+		"b",
+		(uint8_t) !!on);
+
+	assert(SK_ERROR_NONE == rsp.header.error);
+}
 
 void SidekickIO::gpio_get_intrpt_status(uint32_t * gpio_int_mask)
 {

@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <time.h>
 #include <stdlib.h>
-
+#include <stdint.h>
 
 
 #ifdef _MSC_VER
@@ -117,8 +117,10 @@ public:
 
 	enum INTRPT_STATUS_Msk {
 		INTRPT_STATUS_GPIO_Msk = (1 << 0),
-		INTRPT_STATUS_SPI_Msk  = (1 << 1),
 	};
+
+	uint32_t get_status(void);
+
 
 	enum FW_MODE {
 		FW_MODE_APP = 0x00,
@@ -234,8 +236,8 @@ public:
 			enum SPI_DATA_ORDER data_order = SPI_DATA_ORDER_MSB,
 			uint32_t baudrate = 1000000);
 
-	bool spim_transfer_packet(uint8_t cs_index, uint8_t * buf, size_t len);
-	bool spim_transfer(uint8_t cs_index, uint8_t * buf, size_t len);
+	bool spim_transfer_packet(uint8_t cs_index, uint8_t * data, size_t len);
+	bool spim_transfer(uint8_t cs_index, uint8_t * data, size_t len);
 
 	bool spim_write(uint8_t cs_index, const uint8_t * data, size_t len);
 	bool spim_write_byte(uint8_t cs_index, uint8_t val);
@@ -271,7 +273,7 @@ public:
 	void reset_into_mode(enum FW_MODE mode);
 
 	void firmware_update(
-		const uint8_t * fw_data, size_t fw_data_len, enum FW_MODE reset_mode);
+		const uint8_t * data, size_t len, enum FW_MODE reset_mode);
 
 	void firmware_update_from_file(
 		const char * fw_file, enum FW_MODE reset_mode);

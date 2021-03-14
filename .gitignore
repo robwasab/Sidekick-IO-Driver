@@ -4,3 +4,15 @@ C/Driver/build/
 *.map
 C/Examples/IMU/build/i2cdevlib/Arduino/I2Cdev/I2Cdev.o
 *.o
+C/Driver/VisualStudio/SidekickIO/.vs/SidekickIO/v16/.suo
+C/Driver/VisualStudio/SidekickIO/.vs/
+C/Driver/VisualStudio/SidekickIO/SidekickIO/Debug/SidekickIO.tlog/
+*.out
+*.stackdump
+C/Driver/VisualStudio/SidekickIO/Python/build/
+C/Driver/VisualStudio/SidekickIO/SidekickIOStaticLibrary/x64/Debug/sidekickio.obj
+C/Driver/VisualStudio/SidekickIO/SidekickIOStaticLibrary/x64/Debug/sidekickio_gpio.obj
+C/Driver/VisualStudio/SidekickIO/SidekickIOStaticLibrary/x64/Debug/
+C/Driver/VisualStudio/SidekickIO/SidekickIOTests/x64/Debug/
+C/Examples/Eink/VisualStudio/Eink/.vs/
+C/Examples/Eink/VisualStudio/Eink/Eink/x64/Debug/

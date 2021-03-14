@@ -220,6 +220,7 @@ static void send_reset(
 }
 
 
+#if 0
 static uint8_t get_firmware_mode(
 		libusb_device_handle * handle, uint8_t vendor_interface) {
 	// build a control request:
@@ -259,6 +260,7 @@ static uint8_t get_firmware_mode(
 
 	return rx_data[0];
 }
+#endif
 
 
 static void send_data(
@@ -306,27 +308,6 @@ static void recv_data(
 	assert(0 <= num_transferred);
 	*len = (size_t) num_transferred;
 }
-
-static uint32_t get_status(libusb_device_handle * handle, uint8_t notify_ep)
-{
-	uint32_t status = 0;
-	int num_transferred = 0;
-	unsigned int timeout_ms = TIMEOUT_MS;
-	int res;
-
-	res = libusb_interrupt_transfer(
-		handle,
-		notify_ep,
-		(uint8_t *)&status,
-		sizeof(status),
-		&num_transferred,
-		timeout_ms);
-
-	usb_result(res, "interrupt transfer failed");
-
-	return status;
-}
-
 void SidekickIO::print_arr(const uint8_t * data, size_t len) {
 	for(size_t k = 0; k < len; k++) {
 		if(k < len - 1) {
@@ -400,6 +381,26 @@ void SidekickIO::init(enum FW_MODE mode)
 	}
 	else {
 	}
+}
+
+
+uint32_t SidekickIO::get_status(void)
+{
+	uint32_t status = 0;
+	int num_transferred = 0;
+	int res;
+
+	res = libusb_interrupt_transfer(
+		mHandle,
+		mNotifyEP,
+		(uint8_t *)&status,
+		sizeof(status),
+		&num_transferred,
+		TIMEOUT_MS);
+
+	usb_result(res, "interrupt transfer failed");
+
+	return status;
 }
 
 
@@ -964,7 +965,7 @@ void SidekickIO::main_loop_task(void)
 
 	mLastPollTime = current_time;
 
-	uint32_t status = get_status(mHandle, mNotifyEP);
+	uint32_t status = get_status();
 
 	if(0 == status) {
 		return;

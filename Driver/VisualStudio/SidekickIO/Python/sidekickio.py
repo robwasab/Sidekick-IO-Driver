@@ -193,14 +193,17 @@ class SidekickIO(object):
     def gpio_read(self, gpio_index):
         return _sidekickio.SidekickIO_gpio_read(self, gpio_index)
 
-    def gpio_get_intrpt_status(self, gpio_int_mask):
-        return _sidekickio.SidekickIO_gpio_get_intrpt_status(self, gpio_int_mask)
+    def gpio_get_intrpt_status(self, *args):
+        return _sidekickio.SidekickIO_gpio_get_intrpt_status(self, *args)
 
     def gpio_clr_intrpt_status(self, gpio_int_mask):
         return _sidekickio.SidekickIO_gpio_clr_intrpt_status(self, gpio_int_mask)
+    GPIO_PIN_DETECTION_FALL = _sidekickio.SidekickIO_GPIO_PIN_DETECTION_FALL
+    GPIO_PIN_DETECTION_RISE = _sidekickio.SidekickIO_GPIO_PIN_DETECTION_RISE
+    GPIO_PIN_DETECTION_BOTH = _sidekickio.SidekickIO_GPIO_PIN_DETECTION_BOTH
 
-    def gpio_enable_pin_intrpt(self, gpio_index, handler, obj):
-        return _sidekickio.SidekickIO_gpio_enable_pin_intrpt(self, gpio_index, handler, obj)
+    def gpio_enable_pin_intrpt(self, gpio_index, detection, handler=None, obj=None):
+        return _sidekickio.SidekickIO_gpio_enable_pin_intrpt(self, gpio_index, detection, handler, obj)
 
     def gpio_disable_pin_intrpt(self, gpio_index):
         return _sidekickio.SidekickIO_gpio_disable_pin_intrpt(self, gpio_index)

@@ -4482,7 +4482,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   SidekickIO *arg1 = (SidekickIO *) 0 ;
   uint32_t *arg2 = (uint32_t *) 0 ;
@@ -4490,9 +4490,8 @@ SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status(PyObject *SWIGUNUSE
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  PyObject *swig_obj[2] ;
   
-  if (!SWIG_Python_UnpackTuple(args, "SidekickIO_gpio_get_intrpt_status", 2, 2, swig_obj)) SWIG_fail;
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_gpio_get_intrpt_status" "', argument " "1"" of type '" "SidekickIO *""'"); 
@@ -4508,6 +4507,68 @@ SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status(PyObject *SWIGUNUSE
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  SidekickIO *arg1 = (SidekickIO *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  uint32_t result;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_gpio_get_intrpt_status" "', argument " "1"" of type '" "SidekickIO *""'"); 
+  }
+  arg1 = reinterpret_cast< SidekickIO * >(argp1);
+  result = (uint32_t)(arg1)->gpio_get_intrpt_status();
+  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_get_intrpt_status(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[3] = {
+    0
+  };
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args, "SidekickIO_gpio_get_intrpt_status", 0, 2, argv))) SWIG_fail;
+  --argc;
+  if (argc == 1) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SidekickIO, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      return _wrap_SidekickIO_gpio_get_intrpt_status__SWIG_1(self, argc, argv);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SidekickIO, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      void *vptr = 0;
+      int res = SWIG_ConvertPtr(argv[1], &vptr, SWIGTYPE_p_unsigned_int, 0);
+      _v = SWIG_CheckState(res);
+      if (_v) {
+        return _wrap_SidekickIO_gpio_get_intrpt_status__SWIG_0(self, argc, argv);
+      }
+    }
+  }
+  
+fail:
+  SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'SidekickIO_gpio_get_intrpt_status'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    SidekickIO::gpio_get_intrpt_status(uint32_t *)\n"
+    "    SidekickIO::gpio_get_intrpt_status()\n");
+  return 0;
 }
 
 
@@ -4540,20 +4601,22 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   SidekickIO *arg1 = (SidekickIO *) 0 ;
   uint8_t arg2 ;
-  SidekickIO::GPIOHandler arg3 = (SidekickIO::GPIOHandler) 0 ;
-  void *arg4 = (void *) 0 ;
+  enum SidekickIO::GPIO_PIN_DETECTION arg3 ;
+  SidekickIO::GPIOHandler arg4 = (SidekickIO::GPIOHandler) 0 ;
+  void *arg5 = (void *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   unsigned char val2 ;
   int ecode2 = 0 ;
-  int res4 ;
-  PyObject *swig_obj[4] ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int res5 ;
   
-  if (!SWIG_Python_UnpackTuple(args, "SidekickIO_gpio_enable_pin_intrpt", 4, 4, swig_obj)) SWIG_fail;
+  if ((nobjs < 5) || (nobjs > 5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "1"" of type '" "SidekickIO *""'"); 
@@ -4564,21 +4627,202 @@ SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt(PyObject *SWIGUNUSE
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "2"" of type '" "uint8_t""'");
   } 
   arg2 = static_cast< uint8_t >(val2);
+  ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "3"" of type '" "enum SidekickIO::GPIO_PIN_DETECTION""'");
+  } 
+  arg3 = static_cast< enum SidekickIO::GPIO_PIN_DETECTION >(val3);
   {
-    int res = SWIG_ConvertFunctionPtr(swig_obj[2], (void**)(&arg3), SWIGTYPE_p_f_p_SidekickIO_unsigned_char_p_void__void);
+    int res = SWIG_ConvertFunctionPtr(swig_obj[3], (void**)(&arg4), SWIGTYPE_p_f_p_SidekickIO_unsigned_char_p_void__void);
     if (!SWIG_IsOK(res)) {
-      SWIG_exception_fail(SWIG_ArgError(res), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "3"" of type '" "SidekickIO::GPIOHandler""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "4"" of type '" "SidekickIO::GPIOHandler""'"); 
     }
   }
-  res4 = SWIG_ConvertPtr(swig_obj[3],SWIG_as_voidptrptr(&arg4), 0, 0);
-  if (!SWIG_IsOK(res4)) {
-    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "4"" of type '" "void *""'"); 
+  res5 = SWIG_ConvertPtr(swig_obj[4],SWIG_as_voidptrptr(&arg5), 0, 0);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "5"" of type '" "void *""'"); 
+  }
+  (arg1)->gpio_enable_pin_intrpt(arg2,arg3,arg4,arg5);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  SidekickIO *arg1 = (SidekickIO *) 0 ;
+  uint8_t arg2 ;
+  enum SidekickIO::GPIO_PIN_DETECTION arg3 ;
+  SidekickIO::GPIOHandler arg4 = (SidekickIO::GPIOHandler) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  
+  if ((nobjs < 4) || (nobjs > 4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "1"" of type '" "SidekickIO *""'"); 
+  }
+  arg1 = reinterpret_cast< SidekickIO * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "2"" of type '" "uint8_t""'");
+  } 
+  arg2 = static_cast< uint8_t >(val2);
+  ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "3"" of type '" "enum SidekickIO::GPIO_PIN_DETECTION""'");
+  } 
+  arg3 = static_cast< enum SidekickIO::GPIO_PIN_DETECTION >(val3);
+  {
+    int res = SWIG_ConvertFunctionPtr(swig_obj[3], (void**)(&arg4), SWIGTYPE_p_f_p_SidekickIO_unsigned_char_p_void__void);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "4"" of type '" "SidekickIO::GPIOHandler""'"); 
+    }
   }
   (arg1)->gpio_enable_pin_intrpt(arg2,arg3,arg4);
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_2(PyObject *SWIGUNUSEDPARM(self), Py_ssize_t nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  SidekickIO *arg1 = (SidekickIO *) 0 ;
+  uint8_t arg2 ;
+  enum SidekickIO::GPIO_PIN_DETECTION arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  unsigned char val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  
+  if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "1"" of type '" "SidekickIO *""'"); 
+  }
+  arg1 = reinterpret_cast< SidekickIO * >(argp1);
+  ecode2 = SWIG_AsVal_unsigned_SS_char(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "2"" of type '" "uint8_t""'");
+  } 
+  arg2 = static_cast< uint8_t >(val2);
+  ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SidekickIO_gpio_enable_pin_intrpt" "', argument " "3"" of type '" "enum SidekickIO::GPIO_PIN_DETECTION""'");
+  } 
+  arg3 = static_cast< enum SidekickIO::GPIO_PIN_DETECTION >(val3);
+  (arg1)->gpio_enable_pin_intrpt(arg2,arg3);
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SidekickIO_gpio_enable_pin_intrpt(PyObject *self, PyObject *args) {
+  Py_ssize_t argc;
+  PyObject *argv[6] = {
+    0
+  };
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args, "SidekickIO_gpio_enable_pin_intrpt", 0, 5, argv))) SWIG_fail;
+  --argc;
+  if (argc == 3) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SidekickIO, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          return _wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_2(self, argc, argv);
+        }
+      }
+    }
+  }
+  if (argc == 4) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SidekickIO, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          void *ptr = 0;
+          int res = SWIG_ConvertFunctionPtr(argv[3], &ptr, SWIGTYPE_p_f_p_SidekickIO_unsigned_char_p_void__void);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            return _wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_1(self, argc, argv);
+          }
+        }
+      }
+    }
+  }
+  if (argc == 5) {
+    int _v;
+    void *vptr = 0;
+    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_SidekickIO, 0);
+    _v = SWIG_CheckState(res);
+    if (_v) {
+      {
+        int res = SWIG_AsVal_unsigned_SS_char(argv[1], NULL);
+        _v = SWIG_CheckState(res);
+      }
+      if (_v) {
+        {
+          int res = SWIG_AsVal_int(argv[2], NULL);
+          _v = SWIG_CheckState(res);
+        }
+        if (_v) {
+          void *ptr = 0;
+          int res = SWIG_ConvertFunctionPtr(argv[3], &ptr, SWIGTYPE_p_f_p_SidekickIO_unsigned_char_p_void__void);
+          _v = SWIG_CheckState(res);
+          if (_v) {
+            void *ptr = 0;
+            int res = SWIG_ConvertPtr(argv[4], &ptr, 0, 0);
+            _v = SWIG_CheckState(res);
+            if (_v) {
+              return _wrap_SidekickIO_gpio_enable_pin_intrpt__SWIG_0(self, argc, argv);
+            }
+          }
+        }
+      }
+    }
+  }
+  
+fail:
+  SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'SidekickIO_gpio_enable_pin_intrpt'.\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    SidekickIO::gpio_enable_pin_intrpt(uint8_t,enum SidekickIO::GPIO_PIN_DETECTION,SidekickIO::GPIOHandler,void *)\n"
+    "    SidekickIO::gpio_enable_pin_intrpt(uint8_t,enum SidekickIO::GPIO_PIN_DETECTION,SidekickIO::GPIOHandler)\n"
+    "    SidekickIO::gpio_enable_pin_intrpt(uint8_t,enum SidekickIO::GPIO_PIN_DETECTION)\n");
+  return 0;
 }
 
 
@@ -5741,6 +5985,9 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "SidekickIO_SPI_MODE_3",SWIG_From_int(static_cast< int >(SidekickIO::SPI_MODE_3)));
   SWIG_Python_SetConstant(d, "SidekickIO_SPI_DATA_ORDER_MSB",SWIG_From_int(static_cast< int >(SidekickIO::SPI_DATA_ORDER_MSB)));
   SWIG_Python_SetConstant(d, "SidekickIO_SPI_DATA_ORDER_LSB",SWIG_From_int(static_cast< int >(SidekickIO::SPI_DATA_ORDER_LSB)));
+  SWIG_Python_SetConstant(d, "SidekickIO_GPIO_PIN_DETECTION_FALL",SWIG_From_int(static_cast< int >(SidekickIO::GPIO_PIN_DETECTION_FALL)));
+  SWIG_Python_SetConstant(d, "SidekickIO_GPIO_PIN_DETECTION_RISE",SWIG_From_int(static_cast< int >(SidekickIO::GPIO_PIN_DETECTION_RISE)));
+  SWIG_Python_SetConstant(d, "SidekickIO_GPIO_PIN_DETECTION_BOTH",SWIG_From_int(static_cast< int >(SidekickIO::GPIO_PIN_DETECTION_BOTH)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

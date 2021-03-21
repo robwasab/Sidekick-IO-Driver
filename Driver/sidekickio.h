@@ -289,6 +289,10 @@ public:
 	void firmware_update_from_file(
 		const char * fw_file, enum FW_MODE reset_mode);
 
+	void dummy(void) {
+		printf("hello world\n");
+	}
+
 private:
 	libusb_context * mUSB;
 	libusb_device_handle * mHandle;

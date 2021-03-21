@@ -229,6 +229,9 @@ class SidekickIO(object):
     def firmware_update_from_file(self, fw_file, reset_mode):
         return _sidekickio.SidekickIO_firmware_update_from_file(self, fw_file, reset_mode)
 
+    def dummy(self):
+        return _sidekickio.SidekickIO_dummy(self)
+
 # Register SidekickIO in _sidekickio:
 _sidekickio.SidekickIO_swigregister(SidekickIO)
 

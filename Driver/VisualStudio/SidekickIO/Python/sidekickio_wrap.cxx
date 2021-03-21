@@ -5068,6 +5068,28 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SidekickIO_dummy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  SidekickIO *arg1 = (SidekickIO *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_SidekickIO, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SidekickIO_dummy" "', argument " "1"" of type '" "SidekickIO *""'"); 
+  }
+  arg1 = reinterpret_cast< SidekickIO * >(argp1);
+  (arg1)->dummy();
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *SidekickIO_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args, "swigregister", 1, 1, &obj)) return NULL;
@@ -5115,6 +5137,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "SidekickIO_reset_into_mode", _wrap_SidekickIO_reset_into_mode, METH_VARARGS, NULL},
 	 { "SidekickIO_firmware_update", _wrap_SidekickIO_firmware_update, METH_VARARGS, NULL},
 	 { "SidekickIO_firmware_update_from_file", _wrap_SidekickIO_firmware_update_from_file, METH_VARARGS, NULL},
+	 { "SidekickIO_dummy", _wrap_SidekickIO_dummy, METH_O, NULL},
 	 { "SidekickIO_swigregister", SidekickIO_swigregister, METH_O, NULL},
 	 { "SidekickIO_swiginit", SidekickIO_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

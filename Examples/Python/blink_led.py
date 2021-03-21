@@ -1,10 +1,9 @@
-import sys
-sys.path.append(r"..\..\Driver\VisualStudio\SidekickIO\Python")
-
 from sidekickio import SidekickIO
 from time import sleep
 
 sk = SidekickIO()
+
+sk.dummy()
 
 on = False
 while True:

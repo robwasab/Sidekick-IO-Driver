@@ -131,8 +131,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)Python
-generate_python_interface.bat</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -154,12 +154,13 @@ generate_python_interface.bat</Command>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>cd $(SolutionDir)Python
-generate_python_interface.bat</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\sidekickio.cpp" />
+    <ClCompile Include="..\..\..\sidekickio_delay.cpp" />
     <ClCompile Include="..\..\..\sidekickio_gpio.cpp" />
     <ClCompile Include="..\..\..\sidekickio_i2cm.cpp" />
     <ClCompile Include="..\..\..\sidekickio_spim.cpp" />

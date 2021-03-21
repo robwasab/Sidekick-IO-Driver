@@ -134,6 +134,14 @@ void SidekickIO::gpio_get_intrpt_status(uint32_t * gpio_int_mask)
 }
 
 
+uint32_t SidekickIO::gpio_get_intrpt_status(void)
+{
+	uint32_t mask = 0;
+	gpio_get_intrpt_status(&mask);
+
+	return mask;
+}
+
 void SidekickIO::gpio_clr_intrpt_status(uint32_t gpio_int_mask)
 {
 	Packet rsp = {0};
@@ -155,7 +163,10 @@ void SidekickIO::gpio_clr_intrpt_status(uint32_t gpio_int_mask)
 
 
 void SidekickIO::gpio_enable_pin_intrpt(
-		uint8_t gpio_index, GPIOHandler handler, void * obj)
+		uint8_t gpio_index,
+		enum GPIO_PIN_DETECTION detection,
+		GPIOHandler handler,
+		void * obj)
 {
 	Packet rsp = {0};
 	size_t rsplen = 0;
@@ -164,8 +175,9 @@ void SidekickIO::gpio_enable_pin_intrpt(
 		&rsp,
 		&rsplen,
 		CMD_GPIO_ENA_PIN_INTRPT,
-		"b",
-		gpio_index);
+		"bb",
+		gpio_index,
+		(uint8_t) detection);
 
 	assert(SK_ERROR_NONE == rsp.header.error);
 
@@ -180,5 +192,22 @@ void SidekickIO::gpio_enable_pin_intrpt(
 
 void SidekickIO::gpio_disable_pin_intrpt(uint8_t gpio_index)
 {
+	Packet rsp = {0};
+	size_t rsplen = 0;
 
+	transfer_cmd(
+		&rsp,
+		&rsplen,
+		CMD_GPIO_DIS_PIN_INTRPT,
+		"b",
+		gpio_index);
+
+	assert(SK_ERROR_NONE == rsp.header.error);
+
+	if(mPrintFlag) {
+		printf("disabled pin interrupt: %d!\n", gpio_index);
+	}
+
+	mGPIOHandlers[gpio_index] = NULL;
+	mGPIOHandlersArgs[gpio_index] = NULL;
 }

@@ -249,15 +249,26 @@ public:
 
 	void gpio_pin_set(uint8_t gpio_index, bool level);
 	bool gpio_read(uint8_t gpio_index);
+
 	void gpio_get_intrpt_status(uint32_t * gpio_int_mask);
+	uint32_t gpio_get_intrpt_status(void);
+
 	void gpio_clr_intrpt_status(uint32_t gpio_int_mask);
 
 	typedef void(*GPIOHandler)(SidekickIO * self, uint8_t gpio_index, void * obj);
 
+
+	enum GPIO_PIN_DETECTION {
+		GPIO_PIN_DETECTION_FALL = 0x00,
+		GPIO_PIN_DETECTION_RISE = 0x01,
+		GPIO_PIN_DETECTION_BOTH = 0x02,
+	};
+
 	void gpio_enable_pin_intrpt(
 			uint8_t gpio_index,
-			GPIOHandler handler,
-			void * obj);
+			enum GPIO_PIN_DETECTION detection,
+			GPIOHandler handler = NULL,
+			void * obj = NULL);
 
 	void gpio_disable_pin_intrpt(uint8_t gpio_index);
 
@@ -331,6 +342,9 @@ private:
 		size_t  * outlen);
 
 	void print_arr(const uint8_t * data, size_t len);
+
+	// block approximately for the given number of microseconds
+	void delay_us(uint32_t micros);
 };
 
 #endif

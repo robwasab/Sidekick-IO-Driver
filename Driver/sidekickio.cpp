@@ -7,17 +7,6 @@
 
 #include <windows.h>
 
-// eww....
-void usleep(int waitTime) {
-	__int64 time1 = 0;
-	__int64 time2 = 0;
-
-	QueryPerformanceCounter((LARGE_INTEGER*)&time1);
-
-	do {
-		QueryPerformanceCounter((LARGE_INTEGER*)&time2);
-	} while ((time2 - time1) < waitTime);
-}
 
 // Disable "Prefer enum class over enum"
 #pragma warning(disable : 26812)
@@ -948,7 +937,7 @@ bool SidekickIO::wait_for_sidekick(enum FW_MODE mode, uint32_t timeout_sec)
 			// sidekick not in correct firmware mode
 		}
 		print_waiting("looking for sidekick...");
-		usleep(100 * 1000);
+		this->delay_us(100 * 1000);
 	}
 	printf("\nsidekick mode timeout...\n");
 	return false;

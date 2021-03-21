@@ -14,6 +14,7 @@ ODUMP:=objdump
 SZ:=size
 MKDIR:=mkdir
 MV:=mv
+CP:=cp
 ARCHIVER:=ar
 
 # puts each function and each data item into its own section
@@ -79,7 +80,7 @@ $(OUTPU_DIR)%.out : $(OBJS) $(BUILD_DIR)%.o
 	@echo -e $(ECHO_BOLD)$(ECHO_BLUE)"Linking" $@ "from" $^ $(ECHO_RESET)
 	@$(MKDIR) -p $(dir $@)
 	$(CC) $(CFLAGS) $^ $(LIBFLAGS) $(LDFLAGS) -o $@
-	$(MV) $@ ./$(notdir $@)
+	$(CP) $@ ./$(notdir $@)
 
 
 .PHONY: all
